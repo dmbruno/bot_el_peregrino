@@ -15,7 +15,7 @@ import { handleMessage } from './handlers/messageHandler.js';
 
 const execAsync = promisify(exec);
 
-console.log('🚀 Iniciando UBM Viajes Bot con Baileys 7.x (Arquitectura Modular)...\n');
+console.log('🚀 Iniciando El Peregrino viajes y turismo Bot con Baileys 7.x (Arquitectura Modular)...\n');
 
 // Función para restaurar sesión desde variable de entorno (Railway)
 async function restoreSessionFromEnv() {
@@ -66,7 +66,7 @@ async function startBot() {
             creds: state.creds,
             keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'silent' })),
         },
-        browser: ['UBM Viajes Bot', 'Chrome', '120.0.0'],
+        browser: ['El Peregrino viajes y turismo Bot', 'Chrome', '120.0.0'],
         markOnlineOnConnect: true,
         generateHighQualityLinkPreview: true,
         getMessage: async (key) => {

@@ -3,7 +3,7 @@
 // ==========================================
 import { getUserByPhone } from '../utils/utils.js';
 import { handleConversationState } from './conversationHandler.js';
-import { showMenu } from '../flows-baileys/menu.js';
+import { showMenuPrincipal } from '../flows-baileys/menuPrincipal.js';
 import { sendMessage } from '../utils/utils.js';
 
 // Estado de conversaciones (en memoria)
@@ -47,10 +47,10 @@ export async function handleMessage(sock, message) {
                 // Usuario registrado
                 const primerNombre = user.nombre.split(' ')[0];
                 await sendMessage(sock, from, `Hola *${primerNombre}*! ¿En qué podemos ayudarte hoy?`);
-                await showMenu(sock, from, conversationState);
+                await showMenuPrincipal(sock, from, conversationState);
             } else {
                 // Usuario nuevo - iniciar registro
-                await sendMessage(sock, from, '👋 ¡Bienvenido a *UBM Viajes*!');
+                await sendMessage(sock, from, '👋 ¡Bienvenido a *El Peregrino viajes y turismo*!');
                 await sendMessage(sock, from, 'Antes de continuar, necesitamos algunos datos.\nPor favor, escribe tu *nombre completo*:');
                 
                 conversationState[from] = {

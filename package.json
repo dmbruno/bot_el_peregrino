@@ -2,7 +2,7 @@
     "name": "base-bailey-memory",
     "version": "1.0.0",
     "type": "module",
-    "description": "Bot WhatsApp UBM Viajes con Baileys 7.x + ESM",
+    "description": "Bot WhatsApp El Peregrino viajes y turismo con Baileys 7.x + ESM",
     "main": "app.js",
     "engines": {
         "node": ">=20.0.0",

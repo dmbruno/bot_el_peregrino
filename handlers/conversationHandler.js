@@ -2,11 +2,15 @@
 // CONVERSATION HANDLER - Manejo de estados de conversación
 // ==========================================
 import { getUserByPhone, saveUser, saveConsulta, sendMessage } from '../utils/utils.js';
-import { showMenu } from '../flows-baileys/menu.js';
-import { handleMenuSelection } from '../flows-baileys/menu.js';
+import { showMenuPrincipal, handleMenuPrincipalSelection } from '../flows-baileys/menuPrincipal.js';
+import { handleMenuReceptivoSelection } from '../flows-baileys/menuReceptivo.js';
+import { handleMenuEmisivoSelection } from '../flows-baileys/menuEmisivo.js';
 import { handleAdminSelection } from './adminHandler.js';
-import { handleTus15Selection } from '../flows-baileys/tus15/tus15Menu.js';
-import { handleEuropaSelection } from '../flows-baileys/europa/europaMenu.js';
+import { handleSaltaResponse } from '../flows-baileys/receptivo/salta.js';
+import { handleJujuyResponse } from '../flows-baileys/receptivo/jujuy.js';
+import { handleCafayateResponse } from '../flows-baileys/receptivo/cafayate.js';
+import { handlePaquetesResponse } from '../flows-baileys/receptivo/paquetesCompletos.js';
+import { handleCotizacionResponse } from '../flows-baileys/emisivo/cotizacion.js';
 
 export async function handleConversationState(sock, from, text, conversationState) {
     const state = conversationState[from];
@@ -17,7 +21,7 @@ export async function handleConversationState(sock, from, text, conversationStat
     if (normalizedText === 'menu' || normalizedText === 'menú') {
         await sendMessage(sock, from, '🔄 Entendido, volvamos al menú principal...');
         delete conversationState[from];
-        await showMenu(sock, from, conversationState);
+        await showMenuPrincipal(sock, from, conversationState);
         return;
     }
 
@@ -55,7 +59,7 @@ export async function handleConversationState(sock, from, text, conversationStat
                 delete conversationState[from];
                 
                 // Mostrar menú
-                await showMenu(sock, from, conversationState);
+                await showMenuPrincipal(sock, from, conversationState);
                 
             } catch (error) {
                 console.error('Error guardando usuario:', error);
@@ -64,8 +68,52 @@ export async function handleConversationState(sock, from, text, conversationStat
             }
             break;
 
+        case 'MENU_PRINCIPAL':
+            await handleMenuPrincipalSelection(sock, from, text, conversationState);
+            break;
+
+        case 'MENU_RECEPTIVO':
+            await handleMenuReceptivoSelection(sock, from, text, conversationState);
+            break;
+
+        case 'MENU_EMISIVO':
+            await handleMenuEmisivoSelection(sock, from, text, conversationState);
+            break;
+
+        case 'UBICACION':
+            // Si escribe "volver" desde ubicación, regresar al menú principal
+            if (normalizedText === 'volver') {
+                await showMenuPrincipal(sock, from, conversationState);
+            } else {
+                await sendMessage(sock, from, '⚠️ Escribe *Volver* para regresar al menú anterior.');
+            }
+            break;
+
+        // Estados RECEPTIVO
+        case 'ESPERANDO_CONFIRMACION_SALTA':
+            await handleSaltaResponse(sock, from, text, conversationState);
+            break;
+
+        case 'ESPERANDO_CONFIRMACION_JUJUY':
+            await handleJujuyResponse(sock, from, text, conversationState);
+            break;
+
+        case 'ESPERANDO_CONFIRMACION_CAFAYATE':
+            await handleCafayateResponse(sock, from, text, conversationState);
+            break;
+
+        case 'ESPERANDO_CONFIRMACION_PAQUETES':
+            await handlePaquetesResponse(sock, from, text, conversationState);
+            break;
+
+        // Estados EMISIVO
+        case 'ESPERANDO_COTIZACION':
+            await handleCotizacionResponse(sock, from, text, conversationState);
+            break;
+
         case 'MENU':
-            await handleMenuSelection(sock, from, text, conversationState);
+            // Mantener por compatibilidad con flujos antiguos
+            await handleMenuPrincipalSelection(sock, from, text, conversationState);
             break;
 
         case 'CONSULTA_PASAJEROS':
@@ -127,16 +175,6 @@ ${state.data.resumen}
 
         case 'ADMIN':
             await handleAdminSelection(sock, from, text, conversationState);
-            break;
-
-        case 'TUS15':
-        case 'TUS15_INTERES':
-            await handleTus15Selection(sock, from, text, conversationState);
-            break;
-
-        case 'EUROPA':
-        case 'EUROPA_INTERES':
-            await handleEuropaSelection(sock, from, text, conversationState);
             break;
 
         default:
