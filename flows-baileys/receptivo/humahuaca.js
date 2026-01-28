@@ -1,46 +1,47 @@
 // ==========================================
-// VALLES CALCHAQUÍES - CAFAYATE - Turismo Receptivo
+// HUMAHUACA - Turismo Receptivo
 // ==========================================
 import { sendMessage, sendImage, getUserByPhone } from '../../utils/utils.js';
 import { agregarConsultaReceptivo } from '../../utils/googleSheets.js';
 
 // URL de la imagen en Google Drive (formato directo de descarga)
-const CAFAYATE_IMAGE_URL = 'https://drive.google.com/uc?export=download&id=1eqV0R_dcPJgCs-4pAMfsx-_kkeFcZMpI';
+const HUMAHUACA_IMAGE_URL = 'https://drive.google.com/uc?export=download&id=1hVKJlpFXxdhMteJY-v73j--qhQ29UHCC';
 
-export async function showCafayateInfo(sock, from, conversationState) {
+export async function showHumahuacaInfo(sock, from, conversationState) {
     // 1. Enviar imagen primero
-    await sendImage(sock, from, CAFAYATE_IMAGE_URL, '🍷 Valles Calchaquíes - Cafayate');
+    await sendImage(sock, from, HUMAHUACA_IMAGE_URL, '🌈 Quebrada de Humahuaca');
     
     // 2. Enviar información detallada
-    const cafayateText = `� *CAFAYATE* 🍷
+    const humahuacaText = `🌈 *HUMAHUACA* ⛰️
 
-La excursión comienza en Salta, recorriendo la Ruta Nacional 68 y atravesando el Valle de Lerma, con localidades como Cerrillos, La Merced, El Carril y La Viña.
+La excursión comienza en Salta y, tras pasar por San Salvador de Jujuy, ingresamos a la Quebrada de Humahuaca, declarada Patrimonio de la Humanidad por la UNESCO (2003).
 
-Luego ingresamos a la impactante Quebrada de las Conchas, donde el agua y el viento esculpieron formaciones naturales como La Garganta del Diablo, El Anfiteatro, El Sapo, El Fraile, Los Castillos y Las Ventanas.
+📍 Purmamarca, con el Cerro de los Siete Colores
+📍 Maimará, con la Paleta del Pintor
+📍 Tilcara, visita al pueblo
+📍 Uquía, con su histórica iglesia y los Ángeles Arcabuceros
+📍 Humahuaca, ciudad de calles angostas y tradiciones del pueblo coya
 
-📍 Llegamos a Cafayate, en los Valles Calchaquíes, tierra del sol y del buen vino.
+Finalizamos el recorrido regresando a Salta.
 
-✔️ Visita a la Bodega Vasija Secreta con degustación 🍷
-✔️ 2 horas libres para almorzar 🍽️ y recorrer la ciudad
-
-🛣️ *Recorrido:* 390 km
+🛣️ *Recorrido:* 520 km
 ⏱️ *Duración:* 12 horas
 🕖 *Salida:* 7:00 a.m.
 
-� *Precio por persona:* $49.000`;
+💰 *Precio por persona:* $59.000`;
 
-    await sendMessage(sock, from, cafayateText);
+    await sendMessage(sock, from, humahuacaText);
     
     // 3. Preguntar si está interesado
     await sendMessage(sock, from, '💰 ¿Te interesa recibir más información sobre paquetes y precios?\n\n✍️ Escribí *SÍ* o *NO*');
     
     conversationState[from] = {
-        step: 'ESPERANDO_CONFIRMACION_CAFAYATE',
+        step: 'ESPERANDO_CONFIRMACION_HUMAHUACA',
         data: {}
     };
 }
 
-export async function handleCafayateResponse(sock, from, text, conversationState) {
+export async function handleHumahuacaResponse(sock, from, text, conversationState) {
     const response = text.trim().toUpperCase();
     const userId = from.split('@')[0];
 
@@ -63,24 +64,24 @@ export async function handleCafayateResponse(sock, from, text, conversationState
                     nombre: user.nombre,
                     telefono: userId,
                     correo: user.correo,
-                    destino: 'Cafayate - Valles Calchaquíes'
+                    destino: 'Humahuaca - Quebrada de Humahuaca'
                 });
-                console.log('✅ Consulta guardada en Google Sheets (Cafayate)');
+                console.log('✅ Consulta guardada en Google Sheets (Humahuaca)');
             } catch (sheetError) {
                 console.error('⚠️ Error guardando en Sheets, pero continuamos:', sheetError);
             }
             
             await sendMessage(sock, from, `✅ ¡Perfecto *${primerNombre}*! 
 
-Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${userId}* registrado con toda la información sobre los Valles Calchaquíes.
+Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${userId}* registrado con toda la información sobre Humahuaca y la Quebrada.
 
 📞 También podés llamarnos directamente:
 • Fijo: 3884291903
 • Celular: 3874029503
 
-¡Muchas gracias por confiar en *El Peregrino viajes y turismo*! 🍷✨`);
+¡Muchas gracias por confiar en *El Peregrino viajes y turismo*! 🌈✨`);
             
-            console.log(`📊 Lead generado - Cafayate: ${user.nombre} (${user.correo})`);
+            console.log(`📊 Lead generado - Humahuaca: ${user.nombre} (${user.correo})`);
             
             delete conversationState[from];
             
@@ -94,7 +95,7 @@ Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${user
         // Usuario no interesado - despedida amable
         await sendMessage(sock, from, `Entendido, gracias por tu tiempo. 😊
 
-Si en algún momento te interesa conocer los Valles Calchaquíes, no dudes en contactarnos.
+Si en algún momento te interesa conocer la Quebrada de Humahuaca, no dudes en contactarnos.
 
 ✍️ Escribí *menu* o *hola* cuando quieras volver a interactuar con nosotros.
 

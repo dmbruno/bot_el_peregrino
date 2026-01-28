@@ -5,12 +5,20 @@ import { getUserByPhone, saveUser, saveConsulta, sendMessage } from '../utils/ut
 import { showMenuPrincipal, handleMenuPrincipalSelection } from '../flows-baileys/menuPrincipal.js';
 import { handleMenuReceptivoSelection } from '../flows-baileys/menuReceptivo.js';
 import { handleMenuEmisivoSelection } from '../flows-baileys/menuEmisivo.js';
+import { handleSalidasGrupalesSelection } from '../flows-baileys/emisivo/salidasGrupales/salidasGrupales.js';
 import { handleAdminSelection } from './adminHandler.js';
-import { handleSaltaResponse } from '../flows-baileys/receptivo/salta.js';
-import { handleJujuyResponse } from '../flows-baileys/receptivo/jujuy.js';
 import { handleCafayateResponse } from '../flows-baileys/receptivo/cafayate.js';
-import { handlePaquetesResponse } from '../flows-baileys/receptivo/paquetesCompletos.js';
+import { handleCachiResponse } from '../flows-baileys/receptivo/cachi.js';
+import { handleHumahuacaResponse } from '../flows-baileys/receptivo/humahuaca.js';
+import { handlePurmamarcaResponse } from '../flows-baileys/receptivo/purmamarca.js';
+import { handleHornocalResponse } from '../flows-baileys/receptivo/hornocal.js';
+import { handleCityTourSaltaResponse } from '../flows-baileys/receptivo/cityTourSalta.js';
+import { handleTrenNubesResponse } from '../flows-baileys/receptivo/trenNubes.js';
 import { handleCotizacionResponse } from '../flows-baileys/emisivo/cotizacion.js';
+import { handlePromosResponse } from '../flows-baileys/emisivo/promos/promos.js';
+import { handlePeruResponse } from '../flows-baileys/emisivo/salidasGrupales/peru.js';
+import { handleEuropaResponse } from '../flows-baileys/emisivo/salidasGrupales/europa.js';
+import { handleTurquiaDubaiResponse } from '../flows-baileys/emisivo/salidasGrupales/turquiaDubai.js';
 
 export async function handleConversationState(sock, from, text, conversationState) {
     const state = conversationState[from];
@@ -80,6 +88,10 @@ export async function handleConversationState(sock, from, text, conversationStat
             await handleMenuEmisivoSelection(sock, from, text, conversationState);
             break;
 
+        case 'MENU_SALIDAS_GRUPALES':
+            await handleSalidasGrupalesSelection(sock, from, text, conversationState);
+            break;
+
         case 'UBICACION':
             // Si escribe "volver" desde ubicación, regresar al menú principal
             if (normalizedText === 'volver') {
@@ -89,26 +101,89 @@ export async function handleConversationState(sock, from, text, conversationStat
             }
             break;
 
+        case 'GUARDERIA':
+            // Si escribe "volver" desde guardería, regresar al menú principal
+            if (normalizedText === 'volver') {
+                await showMenuPrincipal(sock, from, conversationState);
+            } else {
+                await sendMessage(sock, from, '⚠️ Escribe *Volver* para regresar al menú anterior.');
+            }
+            break;
+
+        case 'VISITA_OFICINA':
+            // Si escribe "volver" desde visita oficina, regresar al menú principal
+            if (normalizedText === 'volver') {
+                await showMenuPrincipal(sock, from, conversationState);
+            } else {
+                await sendMessage(sock, from, '⚠️ Escribe *Volver* para regresar al menú anterior.');
+            }
+            break;
+
         // Estados RECEPTIVO
-        case 'ESPERANDO_CONFIRMACION_SALTA':
-            await handleSaltaResponse(sock, from, text, conversationState);
-            break;
-
-        case 'ESPERANDO_CONFIRMACION_JUJUY':
-            await handleJujuyResponse(sock, from, text, conversationState);
-            break;
-
         case 'ESPERANDO_CONFIRMACION_CAFAYATE':
             await handleCafayateResponse(sock, from, text, conversationState);
             break;
 
-        case 'ESPERANDO_CONFIRMACION_PAQUETES':
-            await handlePaquetesResponse(sock, from, text, conversationState);
+        case 'ESPERANDO_CONFIRMACION_CACHI':
+            await handleCachiResponse(sock, from, text, conversationState);
+            break;
+
+        case 'ESPERANDO_CONFIRMACION_HUMAHUACA':
+            await handleHumahuacaResponse(sock, from, text, conversationState);
+            break;
+
+        case 'ESPERANDO_CONFIRMACION_PURMAMARCA':
+            await handlePurmamarcaResponse(sock, from, text, conversationState);
+            break;
+
+        case 'ESPERANDO_CONFIRMACION_HORNOCAL':
+            await handleHornocalResponse(sock, from, text, conversationState);
+            break;
+
+        case 'ESPERANDO_CONFIRMACION_CITY_TOUR':
+            await handleCityTourSaltaResponse(sock, from, text, conversationState);
+            break;
+
+        case 'ESPERANDO_CONFIRMACION_TREN_NUBES':
+            await handleTrenNubesResponse(sock, from, text, conversationState);
             break;
 
         // Estados EMISIVO
-        case 'ESPERANDO_COTIZACION':
-            await handleCotizacionResponse(sock, from, text, conversationState);
+        case 'COTIZACION_LUGAR':
+        case 'COTIZACION_PERSONAS':
+        case 'COTIZACION_FECHA':
+        case 'COTIZACION_DIAS':
+            try {
+                const user = await getUserByPhone(userId);
+                
+                if (!user) {
+                    await sendMessage(sock, from, '⚠️ No encontramos tu registro. Por favor, escribe *menu* para volver al menú principal.');
+                    delete conversationState[from];
+                    return;
+                }
+
+                await handleCotizacionResponse(sock, from, text, conversationState, user.nombre, userId, user.correo);
+            } catch (error) {
+                console.error('❌ Error obteniendo datos de usuario para cotización:', error);
+                await sendMessage(sock, from, '⚠️ Ocurrió un problema. Por favor, intenta nuevamente escribiendo *menu*.');
+                delete conversationState[from];
+            }
+            break;
+
+        case 'ESPERANDO_CONFIRMACION_PROMOS':
+            await handlePromosResponse(sock, from, text, conversationState);
+            break;
+
+        case 'ESPERANDO_CONFIRMACION_PERU':
+            await handlePeruResponse(sock, from, text, conversationState);
+            break;
+
+        case 'ESPERANDO_CONFIRMACION_EUROPA':
+            await handleEuropaResponse(sock, from, text, conversationState);
+            break;
+
+        case 'ESPERANDO_CONFIRMACION_TURQUIA_DUBAI':
+            await handleTurquiaDubaiResponse(sock, from, text, conversationState);
             break;
 
         case 'MENU':

@@ -1,46 +1,47 @@
 // ==========================================
-// VALLES CALCHAQUÍES - CAFAYATE - Turismo Receptivo
+// HUMAHUACA + SERRANÍAS DE HORNOCAL - Turismo Receptivo
 // ==========================================
 import { sendMessage, sendImage, getUserByPhone } from '../../utils/utils.js';
 import { agregarConsultaReceptivo } from '../../utils/googleSheets.js';
 
 // URL de la imagen en Google Drive (formato directo de descarga)
-const CAFAYATE_IMAGE_URL = 'https://drive.google.com/uc?export=download&id=1eqV0R_dcPJgCs-4pAMfsx-_kkeFcZMpI';
+const HORNOCAL_IMAGE_URL = 'https://drive.google.com/uc?export=download&id=140hcVM1W2pulFeyY34XlCBepdWtIS_dx';
 
-export async function showCafayateInfo(sock, from, conversationState) {
+export async function showHornocalInfo(sock, from, conversationState) {
     // 1. Enviar imagen primero
-    await sendImage(sock, from, CAFAYATE_IMAGE_URL, '🍷 Valles Calchaquíes - Cafayate');
+    await sendImage(sock, from, HORNOCAL_IMAGE_URL, '🚵‍♀️ Humahuaca + Serranías de Hornocal');
     
     // 2. Enviar información detallada
-    const cafayateText = `� *CAFAYATE* 🍷
+    const hornocalText = `🚵‍♀️ *HUMAHUACA + SERRANÍAS DE HORNOCAL* 🌈
 
-La excursión comienza en Salta, recorriendo la Ruta Nacional 68 y atravesando el Valle de Lerma, con localidades como Cerrillos, La Merced, El Carril y La Viña.
+La excursión comienza en Salta, viajando hacia Purmamarca y continuando por Huacalera y Uquía, hasta llegar a Humahuaca (2.600 m s. n. m.).
 
-Luego ingresamos a la impactante Quebrada de las Conchas, donde el agua y el viento esculpieron formaciones naturales como La Garganta del Diablo, El Anfiteatro, El Sapo, El Fraile, Los Castillos y Las Ventanas.
+Durante el recorrido, contamos con el acompañamiento de guías locales, quienes comparten la historia y cultura del pueblo con gran detalle.
 
-📍 Llegamos a Cafayate, en los Valles Calchaquíes, tierra del sol y del buen vino.
+📍 Desde Humahuaca, partimos por la Ruta Provincial 73 (camino de ripio consolidado), pasando por El Cementerio y Coctaca, antiguas terrazas de cultivo sobre los cerros 🌾
+📍 Ascendemos hasta Aparzo (4.000 m s. n. m.), tomando un tramo de camino comunal
+📍 Llegada al imponente Hornocal, una cadena montañosa de múltiples colores 🌈, visible en su máximo esplendor cuando el sol la ilumina de frente, creando un cuadro natural único
 
-✔️ Visita a la Bodega Vasija Secreta con degustación 🍷
-✔️ 2 horas libres para almorzar 🍽️ y recorrer la ciudad
+Luego emprendemos el regreso por el mismo camino, recorriendo nuevamente la Quebrada de Humahuaca, declarada Patrimonio Histórico y Cultural de la Humanidad por la UNESCO (2003).
 
-🛣️ *Recorrido:* 390 km
-⏱️ *Duración:* 12 horas
-🕖 *Salida:* 7:00 a.m.
+🛣️ *Recorrido:* 570 km
+⏱️ *Duración:* 13 horas
+🕖 *Salida:* 6 am
 
-� *Precio por persona:* $49.000`;
+💰 *Precio por persona:* $99.000`;
 
-    await sendMessage(sock, from, cafayateText);
+    await sendMessage(sock, from, hornocalText);
     
     // 3. Preguntar si está interesado
     await sendMessage(sock, from, '💰 ¿Te interesa recibir más información sobre paquetes y precios?\n\n✍️ Escribí *SÍ* o *NO*');
     
     conversationState[from] = {
-        step: 'ESPERANDO_CONFIRMACION_CAFAYATE',
+        step: 'ESPERANDO_CONFIRMACION_HORNOCAL',
         data: {}
     };
 }
 
-export async function handleCafayateResponse(sock, from, text, conversationState) {
+export async function handleHornocalResponse(sock, from, text, conversationState) {
     const response = text.trim().toUpperCase();
     const userId = from.split('@')[0];
 
@@ -63,24 +64,24 @@ export async function handleCafayateResponse(sock, from, text, conversationState
                     nombre: user.nombre,
                     telefono: userId,
                     correo: user.correo,
-                    destino: 'Cafayate - Valles Calchaquíes'
+                    destino: 'Humahuaca + Serranías de Hornocal'
                 });
-                console.log('✅ Consulta guardada en Google Sheets (Cafayate)');
+                console.log('✅ Consulta guardada en Google Sheets (Hornocal)');
             } catch (sheetError) {
                 console.error('⚠️ Error guardando en Sheets, pero continuamos:', sheetError);
             }
             
             await sendMessage(sock, from, `✅ ¡Perfecto *${primerNombre}*! 
 
-Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${userId}* registrado con toda la información sobre los Valles Calchaquíes.
+Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${userId}* registrado con toda la información sobre Humahuaca y Hornocal.
 
 📞 También podés llamarnos directamente:
 • Fijo: 3884291903
 • Celular: 3874029503
 
-¡Muchas gracias por confiar en *El Peregrino viajes y turismo*! 🍷✨`);
+¡Muchas gracias por confiar en *El Peregrino viajes y turismo*! 🌈✨`);
             
-            console.log(`📊 Lead generado - Cafayate: ${user.nombre} (${user.correo})`);
+            console.log(`📊 Lead generado - Hornocal: ${user.nombre} (${user.correo})`);
             
             delete conversationState[from];
             
@@ -94,7 +95,7 @@ Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${user
         // Usuario no interesado - despedida amable
         await sendMessage(sock, from, `Entendido, gracias por tu tiempo. 😊
 
-Si en algún momento te interesa conocer los Valles Calchaquíes, no dudes en contactarnos.
+Si en algún momento te interesa conocer las Serranías de Hornocal, no dudes en contactarnos.
 
 ✍️ Escribí *menu* o *hola* cuando quieras volver a interactuar con nosotros.
 

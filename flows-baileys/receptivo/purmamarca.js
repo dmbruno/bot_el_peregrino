@@ -1,46 +1,47 @@
 // ==========================================
-// VALLES CALCHAQUÍES - CAFAYATE - Turismo Receptivo
+// PURMAMARCA + SALINAS GRANDES - Turismo Receptivo
 // ==========================================
 import { sendMessage, sendImage, getUserByPhone } from '../../utils/utils.js';
 import { agregarConsultaReceptivo } from '../../utils/googleSheets.js';
 
 // URL de la imagen en Google Drive (formato directo de descarga)
-const CAFAYATE_IMAGE_URL = 'https://drive.google.com/uc?export=download&id=1eqV0R_dcPJgCs-4pAMfsx-_kkeFcZMpI';
+const PURMAMARCA_IMAGE_URL = 'https://drive.google.com/uc?export=download&id=1GMWnzG9_AMLwpcHGunUG0jgi82tMfaxw';
 
-export async function showCafayateInfo(sock, from, conversationState) {
+export async function showPurmamarcaInfo(sock, from, conversationState) {
     // 1. Enviar imagen primero
-    await sendImage(sock, from, CAFAYATE_IMAGE_URL, '🍷 Valles Calchaquíes - Cafayate');
+    await sendImage(sock, from, PURMAMARCA_IMAGE_URL, '🗻 Purmamarca + Salinas Grandes');
     
     // 2. Enviar información detallada
-    const cafayateText = `� *CAFAYATE* 🍷
+    const purmamarcaText = `🗻 *PURMAMARCA + SALINAS GRANDES (JUJUY)* 🏔️
 
-La excursión comienza en Salta, recorriendo la Ruta Nacional 68 y atravesando el Valle de Lerma, con localidades como Cerrillos, La Merced, El Carril y La Viña.
+La excursión comienza en Salta y, tras pasar por San Salvador de Jujuy, ingresamos a la Quebrada, disfrutando de sus paisajes únicos.
 
-Luego ingresamos a la impactante Quebrada de las Conchas, donde el agua y el viento esculpieron formaciones naturales como La Garganta del Diablo, El Anfiteatro, El Sapo, El Fraile, Los Castillos y Las Ventanas.
+📍 Purmamarca, visita al pintoresco pueblo y al icónico Cerro de los Siete Colores 🌈
+📍 Ascenso por la imponente Cuesta del Lipán, alcanzando los 4.170 m s. n. m. ⛰️
+📍 Salinas Grandes de Jujuy, donde se recorren los piletones y se aprecia la inmensa extensión blanca de sal, creando paisajes inolvidables 🤍✨
 
-📍 Llegamos a Cafayate, en los Valles Calchaquíes, tierra del sol y del buen vino.
+Luego regresamos a Purmamarca, con tiempo libre para almorzar 🍽️ y recorrer el pueblo a tu ritmo.
 
-✔️ Visita a la Bodega Vasija Secreta con degustación 🍷
-✔️ 2 horas libres para almorzar 🍽️ y recorrer la ciudad
+Finalizamos la excursión con regreso a la ciudad de Salta.
 
-🛣️ *Recorrido:* 390 km
-⏱️ *Duración:* 12 horas
+🛣️ *Recorrido:* 450 km
+⏱️ *Duración:* 10 horas
 🕖 *Salida:* 7:00 a.m.
 
-� *Precio por persona:* $49.000`;
+💰 *Precio por persona:* $59.000`;
 
-    await sendMessage(sock, from, cafayateText);
+    await sendMessage(sock, from, purmamarcaText);
     
     // 3. Preguntar si está interesado
     await sendMessage(sock, from, '💰 ¿Te interesa recibir más información sobre paquetes y precios?\n\n✍️ Escribí *SÍ* o *NO*');
     
     conversationState[from] = {
-        step: 'ESPERANDO_CONFIRMACION_CAFAYATE',
+        step: 'ESPERANDO_CONFIRMACION_PURMAMARCA',
         data: {}
     };
 }
 
-export async function handleCafayateResponse(sock, from, text, conversationState) {
+export async function handlePurmamarcaResponse(sock, from, text, conversationState) {
     const response = text.trim().toUpperCase();
     const userId = from.split('@')[0];
 
@@ -63,24 +64,24 @@ export async function handleCafayateResponse(sock, from, text, conversationState
                     nombre: user.nombre,
                     telefono: userId,
                     correo: user.correo,
-                    destino: 'Cafayate - Valles Calchaquíes'
+                    destino: 'Purmamarca + Salinas Grandes'
                 });
-                console.log('✅ Consulta guardada en Google Sheets (Cafayate)');
+                console.log('✅ Consulta guardada en Google Sheets (Purmamarca)');
             } catch (sheetError) {
                 console.error('⚠️ Error guardando en Sheets, pero continuamos:', sheetError);
             }
             
             await sendMessage(sock, from, `✅ ¡Perfecto *${primerNombre}*! 
 
-Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${userId}* registrado con toda la información sobre los Valles Calchaquíes.
+Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${userId}* registrado con toda la información sobre Purmamarca y Salinas Grandes.
 
 📞 También podés llamarnos directamente:
 • Fijo: 3884291903
 • Celular: 3874029503
 
-¡Muchas gracias por confiar en *El Peregrino viajes y turismo*! 🍷✨`);
+¡Muchas gracias por confiar en *El Peregrino viajes y turismo*! 🗻✨`);
             
-            console.log(`📊 Lead generado - Cafayate: ${user.nombre} (${user.correo})`);
+            console.log(`📊 Lead generado - Purmamarca: ${user.nombre} (${user.correo})`);
             
             delete conversationState[from];
             
@@ -94,7 +95,7 @@ Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${user
         // Usuario no interesado - despedida amable
         await sendMessage(sock, from, `Entendido, gracias por tu tiempo. 😊
 
-Si en algún momento te interesa conocer los Valles Calchaquíes, no dudes en contactarnos.
+Si en algún momento te interesa conocer Purmamarca y las Salinas Grandes, no dudes en contactarnos.
 
 ✍️ Escribí *menu* o *hola* cuando quieras volver a interactuar con nosotros.
 

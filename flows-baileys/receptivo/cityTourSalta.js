@@ -1,46 +1,48 @@
 // ==========================================
-// VALLES CALCHAQUÍES - CAFAYATE - Turismo Receptivo
+// CITY TOUR SALTA - Turismo Receptivo
 // ==========================================
 import { sendMessage, sendImage, getUserByPhone } from '../../utils/utils.js';
 import { agregarConsultaReceptivo } from '../../utils/googleSheets.js';
 
 // URL de la imagen en Google Drive (formato directo de descarga)
-const CAFAYATE_IMAGE_URL = 'https://drive.google.com/uc?export=download&id=1eqV0R_dcPJgCs-4pAMfsx-_kkeFcZMpI';
+const CITY_TOUR_IMAGE_URL = 'https://drive.google.com/uc?export=download&id=13d4_rkzjKgUhgJSzfcb5EFDzFOHNr2dr';
 
-export async function showCafayateInfo(sock, from, conversationState) {
+export async function showCityTourSaltaInfo(sock, from, conversationState) {
     // 1. Enviar imagen primero
-    await sendImage(sock, from, CAFAYATE_IMAGE_URL, '🍷 Valles Calchaquíes - Cafayate');
+    await sendImage(sock, from, CITY_TOUR_IMAGE_URL, '⛪️ City Tour - Salta');
     
     // 2. Enviar información detallada
-    const cafayateText = `� *CAFAYATE* 🍷
+    const cityTourText = `⛪️ *CITY TOUR – SALTA* 🏬
 
-La excursión comienza en Salta, recorriendo la Ruta Nacional 68 y atravesando el Valle de Lerma, con localidades como Cerrillos, La Merced, El Carril y La Viña.
+Salta enamora por su hospitalidad, su gente y la arquitectura colonial de sus edificios.
 
-Luego ingresamos a la impactante Quebrada de las Conchas, donde el agua y el viento esculpieron formaciones naturales como La Garganta del Diablo, El Anfiteatro, El Sapo, El Fraile, Los Castillos y Las Ventanas.
+La excursión comienza en la Plaza 9 de Julio, rodeada por la Catedral Basílica de Salta, el Cabildo Histórico, el Museo de Arqueología de Alta Montaña (MAAM) y la ex Casa de Gobierno.
 
-📍 Llegamos a Cafayate, en los Valles Calchaquíes, tierra del sol y del buen vino.
+📍 Continuamos hacia el este para observar la imponente Iglesia San Francisco, con la torre más alta de Sudamérica (54 m) ⛪
+📍 Visita al Convento San Bernardo
+📍 Ascenso al Cerro San Bernardo, desde donde se obtienen las mejores vistas panorámicas del Valle de Lerma 🌄
+📍 Monumentos al Gral. Martín Miguel de Güemes y al 20 de febrero
+📍 Recorrido por San Lorenzo, villa veraniega y su quebrada 🌿
+📍 Finalizamos en el Mercado Artesanal, ideal para compras y souvenirs 🛍️
 
-✔️ Visita a la Bodega Vasija Secreta con degustación 🍷
-✔️ 2 horas libres para almorzar 🍽️ y recorrer la ciudad
+🛣️ *Recorrido:* 100 km
+⏱️ *Duración:* 4 horas
+🕓 *Salida:* 16:00 hs
 
-🛣️ *Recorrido:* 390 km
-⏱️ *Duración:* 12 horas
-🕖 *Salida:* 7:00 a.m.
+💰 *Precio por persona:* $35.000`;
 
-� *Precio por persona:* $49.000`;
-
-    await sendMessage(sock, from, cafayateText);
+    await sendMessage(sock, from, cityTourText);
     
     // 3. Preguntar si está interesado
     await sendMessage(sock, from, '💰 ¿Te interesa recibir más información sobre paquetes y precios?\n\n✍️ Escribí *SÍ* o *NO*');
     
     conversationState[from] = {
-        step: 'ESPERANDO_CONFIRMACION_CAFAYATE',
+        step: 'ESPERANDO_CONFIRMACION_CITY_TOUR',
         data: {}
     };
 }
 
-export async function handleCafayateResponse(sock, from, text, conversationState) {
+export async function handleCityTourSaltaResponse(sock, from, text, conversationState) {
     const response = text.trim().toUpperCase();
     const userId = from.split('@')[0];
 
@@ -63,24 +65,24 @@ export async function handleCafayateResponse(sock, from, text, conversationState
                     nombre: user.nombre,
                     telefono: userId,
                     correo: user.correo,
-                    destino: 'Cafayate - Valles Calchaquíes'
+                    destino: 'City Tour - Salta'
                 });
-                console.log('✅ Consulta guardada en Google Sheets (Cafayate)');
+                console.log('✅ Consulta guardada en Google Sheets (City Tour Salta)');
             } catch (sheetError) {
                 console.error('⚠️ Error guardando en Sheets, pero continuamos:', sheetError);
             }
             
             await sendMessage(sock, from, `✅ ¡Perfecto *${primerNombre}*! 
 
-Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${userId}* registrado con toda la información sobre los Valles Calchaquíes.
+Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${userId}* registrado con toda la información sobre el City Tour en Salta.
 
 📞 También podés llamarnos directamente:
 • Fijo: 3884291903
 • Celular: 3874029503
 
-¡Muchas gracias por confiar en *El Peregrino viajes y turismo*! 🍷✨`);
+¡Muchas gracias por confiar en *El Peregrino viajes y turismo*! ⛪️✨`);
             
-            console.log(`📊 Lead generado - Cafayate: ${user.nombre} (${user.correo})`);
+            console.log(`📊 Lead generado - City Tour Salta: ${user.nombre} (${user.correo})`);
             
             delete conversationState[from];
             
@@ -94,7 +96,7 @@ Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${user
         // Usuario no interesado - despedida amable
         await sendMessage(sock, from, `Entendido, gracias por tu tiempo. 😊
 
-Si en algún momento te interesa conocer los Valles Calchaquíes, no dudes en contactarnos.
+Si en algún momento te interesa conocer Salta con nuestro City Tour, no dudes en contactarnos.
 
 ✍️ Escribí *menu* o *hola* cuando quieras volver a interactuar con nosotros.
 

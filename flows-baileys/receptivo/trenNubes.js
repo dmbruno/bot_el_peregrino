@@ -1,46 +1,52 @@
 // ==========================================
-// VALLES CALCHAQUÍES - CAFAYATE - Turismo Receptivo
+// TREN A LAS NUBES - Turismo Receptivo
 // ==========================================
 import { sendMessage, sendImage, getUserByPhone } from '../../utils/utils.js';
 import { agregarConsultaReceptivo } from '../../utils/googleSheets.js';
 
 // URL de la imagen en Google Drive (formato directo de descarga)
-const CAFAYATE_IMAGE_URL = 'https://drive.google.com/uc?export=download&id=1eqV0R_dcPJgCs-4pAMfsx-_kkeFcZMpI';
+const TREN_NUBES_IMAGE_URL = 'https://drive.google.com/uc?export=download&id=19fndfJSSEnzR0Pi3PU0dZ5qPJVH20Rsv';
 
-export async function showCafayateInfo(sock, from, conversationState) {
+export async function showTrenNubesInfo(sock, from, conversationState) {
     // 1. Enviar imagen primero
-    await sendImage(sock, from, CAFAYATE_IMAGE_URL, '🍷 Valles Calchaquíes - Cafayate');
+    await sendImage(sock, from, TREN_NUBES_IMAGE_URL, '🚂 Tren a las Nubes');
     
     // 2. Enviar información detallada
-    const cafayateText = `� *CAFAYATE* 🍷
+    const trenNubesText = `🚂 *TREN A LAS NUBES (modalidad bus + tren)* ⛰️
 
-La excursión comienza en Salta, recorriendo la Ruta Nacional 68 y atravesando el Valle de Lerma, con localidades como Cerrillos, La Merced, El Carril y La Viña.
+La excursión comienza muy temprano desde la ciudad de Salta, viajando en vehículo turístico hacia el norte, recorriendo la imponente Quebrada del Toro, entre paisajes precordilleranos y paradas culturales.
 
-Luego ingresamos a la impactante Quebrada de las Conchas, donde el agua y el viento esculpieron formaciones naturales como La Garganta del Diablo, El Anfiteatro, El Sapo, El Fraile, Los Castillos y Las Ventanas.
+📍 Campo Quijano, primer pueblo ferroviario
+📍 El Alfarcito, parada para desayuno regional y feria de productos locales 🥐
+📍 Quebrada del Toro, con vistas del Viaducto El Toro
+📍 Santa Rosa de Tastil (parada opcional, según operador)
+📍 Llegada a San Antonio de los Cobres (aprox. 10:30 / 11:00 hs)
 
-📍 Llegamos a Cafayate, en los Valles Calchaquíes, tierra del sol y del buen vino.
+🚂 *Tramo ferroviario – Tren a las Nubes*
+✔️ Embarque en San Antonio de los Cobres
+✔️ Recorrido de aprox. 18 km hasta el Viaducto La Polvorilla
+✔️ Parada a 4.200 m s. n. m., tiempo para bajar, sacar fotos 📸 y disfrutar de una experiencia única en altura
 
-✔️ Visita a la Bodega Vasija Secreta con degustación 🍷
-✔️ 2 horas libres para almorzar 🍽️ y recorrer la ciudad
+Luego se emprende el regreso a Salta por el mismo camino, finalizando la excursión por la tarde/noche.
 
-🛣️ *Recorrido:* 390 km
-⏱️ *Duración:* 12 horas
-🕖 *Salida:* 7:00 a.m.
+🛣️ *Recorrido:* 320 km
+⏱️ *Duración:* día completo
+🕕 *Salida:* entre 6:00 y 7:00 a.m.
 
-� *Precio por persona:* $49.000`;
+💰 *Precio por persona:* Consultar disponibilidad`;
 
-    await sendMessage(sock, from, cafayateText);
+    await sendMessage(sock, from, trenNubesText);
     
     // 3. Preguntar si está interesado
     await sendMessage(sock, from, '💰 ¿Te interesa recibir más información sobre paquetes y precios?\n\n✍️ Escribí *SÍ* o *NO*');
     
     conversationState[from] = {
-        step: 'ESPERANDO_CONFIRMACION_CAFAYATE',
+        step: 'ESPERANDO_CONFIRMACION_TREN_NUBES',
         data: {}
     };
 }
 
-export async function handleCafayateResponse(sock, from, text, conversationState) {
+export async function handleTrenNubesResponse(sock, from, text, conversationState) {
     const response = text.trim().toUpperCase();
     const userId = from.split('@')[0];
 
@@ -63,24 +69,24 @@ export async function handleCafayateResponse(sock, from, text, conversationState
                     nombre: user.nombre,
                     telefono: userId,
                     correo: user.correo,
-                    destino: 'Cafayate - Valles Calchaquíes'
+                    destino: 'Tren a las Nubes'
                 });
-                console.log('✅ Consulta guardada en Google Sheets (Cafayate)');
+                console.log('✅ Consulta guardada en Google Sheets (Tren a las Nubes)');
             } catch (sheetError) {
                 console.error('⚠️ Error guardando en Sheets, pero continuamos:', sheetError);
             }
             
             await sendMessage(sock, from, `✅ ¡Perfecto *${primerNombre}*! 
 
-Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${userId}* registrado con toda la información sobre los Valles Calchaquíes.
+Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${userId}* registrado con toda la información sobre el Tren a las Nubes.
 
 📞 También podés llamarnos directamente:
 • Fijo: 3884291903
 • Celular: 3874029503
 
-¡Muchas gracias por confiar en *El Peregrino viajes y turismo*! 🍷✨`);
+¡Muchas gracias por confiar en *El Peregrino viajes y turismo*! 🚂✨`);
             
-            console.log(`📊 Lead generado - Cafayate: ${user.nombre} (${user.correo})`);
+            console.log(`📊 Lead generado - Tren a las Nubes: ${user.nombre} (${user.correo})`);
             
             delete conversationState[from];
             
@@ -94,7 +100,7 @@ Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${user
         // Usuario no interesado - despedida amable
         await sendMessage(sock, from, `Entendido, gracias por tu tiempo. 😊
 
-Si en algún momento te interesa conocer los Valles Calchaquíes, no dudes en contactarnos.
+Si en algún momento te interesa vivir la experiencia del Tren a las Nubes, no dudes en contactarnos.
 
 ✍️ Escribí *menu* o *hola* cuando quieras volver a interactuar con nosotros.
 

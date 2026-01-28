@@ -69,3 +69,31 @@ export const sendMessage = async (sock, to, text) => {
         console.error('❌ Error enviando mensaje:', error);
     }
 };
+
+// Función para enviar imágenes desde URL
+export const sendImage = async (sock, to, imageUrl, caption = '') => {
+    try {
+        await sock.sendMessage(to, { 
+            image: { url: imageUrl },
+            caption: caption
+        });
+        console.log(`✅ Imagen enviada a ${to.split('@')[0]}`);
+    } catch (error) {
+        console.error('❌ Error enviando imagen:', error);
+    }
+};
+
+// Función para enviar imágenes como documento (sin compresión de WhatsApp)
+export const sendDocument = async (sock, to, fileUrl, filename, caption = '') => {
+    try {
+        await sock.sendMessage(to, {
+            document: { url: fileUrl },
+            mimetype: 'image/jpeg',
+            fileName: filename,
+            caption: caption
+        });
+        console.log(`✅ Documento enviado a ${to.split('@')[0]}: ${filename}`);
+    } catch (error) {
+        console.error('❌ Error enviando documento:', error);
+    }
+};

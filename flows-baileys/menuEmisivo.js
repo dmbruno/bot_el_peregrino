@@ -11,11 +11,11 @@ Explora el mundo con nuestros paquetes internacionales:
 💰 *1. Solicitar Cotización*
    Arma tu viaje personalizado a cualquier destino
 
-🇹🇷 *2. Turquía en 15 días*
-   Paquete completo por Turquía
+🎁 *2. Promos Especiales*
+   Ofertas exclusivas (próximamente)
 
-🇪🇺 *3. Europa*
-   Circuitos por países europeos
+✈️ *3. Salidas Grupales*
+   Perú, Europa, Turquía y más
 
 
 ✍️ Escribe el *número* de la opción que te interesa. Ó escribe *Volver* para regresar al menu anterior.`;
@@ -39,15 +39,15 @@ export async function handleMenuEmisivoSelection(sock, from, text, conversationS
             break;
 
         case '2':
-            // Importar y ejecutar flujo de Turquía 15 días
-            const { startTUS15Flow } = await import('./emisivo/tus15/tus15.js');
-            await startTUS15Flow(sock, from, conversationState);
+            // Importar y ejecutar flujo de Promos
+            const { showPromosInfo } = await import('./emisivo/promos/promos.js');
+            await showPromosInfo(sock, from, conversationState);
             break;
 
         case '3':
-            // Importar y ejecutar flujo de Europa
-            const { startEuropaFlow } = await import('./emisivo/europa/europa.js');
-            await startEuropaFlow(sock, from, conversationState);
+            // Importar y mostrar menú de Salidas Grupales
+            const { showMenuSalidasGrupales } = await import('./emisivo/salidasGrupales/salidasGrupales.js');
+            await showMenuSalidasGrupales(sock, from, conversationState);
             break;
 
         case 'volver':

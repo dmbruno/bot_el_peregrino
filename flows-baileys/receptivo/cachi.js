@@ -1,46 +1,48 @@
 // ==========================================
-// VALLES CALCHAQUÍES - CAFAYATE - Turismo Receptivo
+// CACHI - Turismo Receptivo
 // ==========================================
 import { sendMessage, sendImage, getUserByPhone } from '../../utils/utils.js';
 import { agregarConsultaReceptivo } from '../../utils/googleSheets.js';
 
 // URL de la imagen en Google Drive (formato directo de descarga)
-const CAFAYATE_IMAGE_URL = 'https://drive.google.com/uc?export=download&id=1eqV0R_dcPJgCs-4pAMfsx-_kkeFcZMpI';
+const CACHI_IMAGE_URL = 'https://drive.google.com/uc?export=download&id=1JlAelMQNVCJgL8OI2fjTT23wfWS-lvWi';
 
-export async function showCafayateInfo(sock, from, conversationState) {
+export async function showCachiInfo(sock, from, conversationState) {
     // 1. Enviar imagen primero
-    await sendImage(sock, from, CAFAYATE_IMAGE_URL, '🍷 Valles Calchaquíes - Cafayate');
+    await sendImage(sock, from, CACHI_IMAGE_URL, '🌵 Cachi - Valles Calchaquíes');
     
     // 2. Enviar información detallada
-    const cafayateText = `� *CAFAYATE* 🍷
+    const cachiText = `🌵 *CACHI* 🌵
 
-La excursión comienza en Salta, recorriendo la Ruta Nacional 68 y atravesando el Valle de Lerma, con localidades como Cerrillos, La Merced, El Carril y La Viña.
+La excursión comienza en Salta, atravesando el Valle de Lerma por la R.N. 68 hasta empalmar con la R.P. 33, disfrutando de paisajes de bosques, quebradas, ríos y montañas.
 
-Luego ingresamos a la impactante Quebrada de las Conchas, donde el agua y el viento esculpieron formaciones naturales como La Garganta del Diablo, El Anfiteatro, El Sapo, El Fraile, Los Castillos y Las Ventanas.
+Ascendemos por la imponente Cuesta del Obispo hasta los 3.348 m s. n. m., continuando por la histórica Recta de Tin Tin y el Parque Nacional Los Cardones, con vistas al Nevado de Cachi.
 
-📍 Llegamos a Cafayate, en los Valles Calchaquíes, tierra del sol y del buen vino.
+📍 Llegamos a Cachi, encantadora ciudad colonial de los Valles Calchaquíes.
 
-✔️ Visita a la Bodega Vasija Secreta con degustación 🍷
-✔️ 2 horas libres para almorzar 🍽️ y recorrer la ciudad
+✔️ Recorrido por la plaza central
+✔️ Visita al Museo Arqueológico y a la iglesia de adobe
+✔️ 2 horas libres para almorzar 🍽️ y recorrer el pueblo
 
-🛣️ *Recorrido:* 390 km
+🛣️ *Recorrido:* 320 km
 ⏱️ *Duración:* 12 horas
 🕖 *Salida:* 7:00 a.m.
+🕕 *Regreso:* aprox. 18:00 hs
 
-� *Precio por persona:* $49.000`;
+💰 *Precio por persona:* $49.000`;
 
-    await sendMessage(sock, from, cafayateText);
+    await sendMessage(sock, from, cachiText);
     
     // 3. Preguntar si está interesado
     await sendMessage(sock, from, '💰 ¿Te interesa recibir más información sobre paquetes y precios?\n\n✍️ Escribí *SÍ* o *NO*');
     
     conversationState[from] = {
-        step: 'ESPERANDO_CONFIRMACION_CAFAYATE',
+        step: 'ESPERANDO_CONFIRMACION_CACHI',
         data: {}
     };
 }
 
-export async function handleCafayateResponse(sock, from, text, conversationState) {
+export async function handleCachiResponse(sock, from, text, conversationState) {
     const response = text.trim().toUpperCase();
     const userId = from.split('@')[0];
 
@@ -63,24 +65,24 @@ export async function handleCafayateResponse(sock, from, text, conversationState
                     nombre: user.nombre,
                     telefono: userId,
                     correo: user.correo,
-                    destino: 'Cafayate - Valles Calchaquíes'
+                    destino: 'Cachi - Valles Calchaquíes'
                 });
-                console.log('✅ Consulta guardada en Google Sheets (Cafayate)');
+                console.log('✅ Consulta guardada en Google Sheets (Cachi)');
             } catch (sheetError) {
                 console.error('⚠️ Error guardando en Sheets, pero continuamos:', sheetError);
             }
             
             await sendMessage(sock, from, `✅ ¡Perfecto *${primerNombre}*! 
 
-Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${userId}* registrado con toda la información sobre los Valles Calchaquíes.
+Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${userId}* registrado con toda la información sobre Cachi.
 
 📞 También podés llamarnos directamente:
 • Fijo: 3884291903
 • Celular: 3874029503
 
-¡Muchas gracias por confiar en *El Peregrino viajes y turismo*! 🍷✨`);
+¡Muchas gracias por confiar en *El Peregrino viajes y turismo*! 🌵✨`);
             
-            console.log(`📊 Lead generado - Cafayate: ${user.nombre} (${user.correo})`);
+            console.log(`📊 Lead generado - Cachi: ${user.nombre} (${user.correo})`);
             
             delete conversationState[from];
             
@@ -94,7 +96,7 @@ Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${user
         // Usuario no interesado - despedida amable
         await sendMessage(sock, from, `Entendido, gracias por tu tiempo. 😊
 
-Si en algún momento te interesa conocer los Valles Calchaquíes, no dudes en contactarnos.
+Si en algún momento te interesa conocer Cachi, no dudes en contactarnos.
 
 ✍️ Escribí *menu* o *hola* cuando quieras volver a interactuar con nosotros.
 
