@@ -29,6 +29,12 @@ Conoce las maravillas del noroeste argentino:
 🚂 *7. Tren a las Nubes*
    Quebrada del Toro, Viaducto La Polvorilla
 
+🏔️ *8. Iruya*
+   Pueblito andino, Abra del Cóndor
+
+🎁 *9. Promos Especiales*
+   Combos con descuento
+
 
 ✍️ Escribe el *número* de la opción que te interesa. Ó escribe *Volver* para regresar al menu anterior.`;
 
@@ -86,6 +92,18 @@ export async function handleMenuReceptivoSelection(sock, from, text, conversatio
             await showTrenNubesInfo(sock, from, conversationState);
             break;
 
+        case '8':
+            // Importar y ejecutar flujo de Iruya
+            const { showIruyaInfo } = await import('./receptivo/iruya.js');
+            await showIruyaInfo(sock, from, conversationState);
+            break;
+
+        case '9':
+            // Importar y mostrar menú de Promos Receptivo
+            const { showPromosReceptivoInfo } = await import('./receptivo/promos/promosReceptivo.js');
+            await showPromosReceptivoInfo(sock, from, conversationState);
+            break;
+
         case 'volver':
         case 'Volver':
         case 'VOLVER':
@@ -95,7 +113,7 @@ export async function handleMenuReceptivoSelection(sock, from, text, conversatio
             break;
 
         default:
-            await sendMessage(sock, from, '⚠️ Respuesta no válida. Por favor selecciona una de las opciones (1-7) o escribe *Volver* para regresar.');
+            await sendMessage(sock, from, '⚠️ Respuesta no válida. Por favor selecciona una de las opciones (1-9) o escribe *Volver* para regresar.');
             await showMenuReceptivo(sock, from, conversationState);
             break;
     }

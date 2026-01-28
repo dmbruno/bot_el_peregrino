@@ -16,7 +16,8 @@ const SPREADSHEET_ID = '1A5ge31_VCrP74eeUc-IUNQy3sZPcbaCR5dKU3xQL-zk';
 const SHEETS = {
     RECEPTIVO: 'Receptivo!A:F',
     EMISIVO: 'Emisivo!A:H',
-    PAQUETES: 'Paquetes!A:F'
+    PAQUETES: 'Paquetes!A:F',
+    PROMOS: 'Promos!A:F'
 };
 
 // Función para autenticar con Google Sheets
@@ -183,6 +184,56 @@ export async function agregarConsultaPaquete(datos) {
         const response = await sheets.spreadsheets.values.append(request);
         
         console.log('✅ Consulta agregada a Google Sheets (Paquetes):', response.data);
+        return response.data;
+
+    } catch (error) {
+        console.error('❌ Error agregando consulta a Google Sheets:', error);
+        throw error;
+    }
+}
+
+// Función para agregar una fila a la hoja de Promos
+export async function agregarConsultaPromo(datos) {
+    try {
+        const authClient = await getAuthClient();
+        const sheets = google.sheets({ version: 'v4', auth: authClient });
+
+        const { nombre, telefono, correo, promo } = datos;
+
+        // Generar fecha de contacto en formato dd/m/yyyy, hh:mm:ss como TEXTO
+        const now = new Date();
+        const dia = now.getDate();
+        const mes = now.getMonth() + 1;
+        const anio = now.getFullYear();
+        const horas = now.getHours().toString().padStart(2, '0');
+        const minutos = now.getMinutes().toString().padStart(2, '0');
+        const segundos = now.getSeconds().toString().padStart(2, '0');
+        const fechaContacto = `${dia}/${mes}/${anio}, ${horas}:${minutos}:${segundos}`;
+
+        // Datos a insertar: A, B, C, D, E, F
+        // A=nombre_completo, B=telefono, C=correo, D=promo_interes, E=fecha_contacto, F=revisado
+        const values = [
+            [
+                nombre || '',           // A: nombre_completo
+                telefono || '',         // B: telefono
+                correo || '',           // C: correo
+                promo || '',            // D: promo_interes
+                fechaContacto,          // E: fecha_contacto
+                'pendiente'             // F: revisado
+            ]
+        ];
+
+        const request = {
+            spreadsheetId: SPREADSHEET_ID,
+            range: SHEETS.PROMOS,
+            valueInputOption: 'RAW',  // RAW para que tome el texto tal cual
+            insertDataOption: 'INSERT_ROWS',
+            resource: { values }
+        };
+
+        const response = await sheets.spreadsheets.values.append(request);
+        
+        console.log('✅ Consulta agregada a Google Sheets (Promos):', response.data);
         return response.data;
 
     } catch (error) {

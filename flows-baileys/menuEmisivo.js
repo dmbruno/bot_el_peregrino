@@ -12,7 +12,7 @@ Explora el mundo con nuestros paquetes internacionales:
    Arma tu viaje personalizado a cualquier destino
 
 🎁 *2. Promos Especiales*
-   Ofertas exclusivas (próximamente)
+   ¡Ofertas exclusivas disponibles!
 
 ✈️ *3. Salidas Grupales*
    Perú, Europa, Turquía y más

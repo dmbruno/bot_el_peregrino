@@ -9,13 +9,18 @@ import { handleSalidasGrupalesSelection } from '../flows-baileys/emisivo/salidas
 import { handleAdminSelection } from './adminHandler.js';
 import { handleCafayateResponse } from '../flows-baileys/receptivo/cafayate.js';
 import { handleCachiResponse } from '../flows-baileys/receptivo/cachi.js';
+import { handleIruyaResponse } from '../flows-baileys/receptivo/iruya.js';
 import { handleHumahuacaResponse } from '../flows-baileys/receptivo/humahuaca.js';
 import { handlePurmamarcaResponse } from '../flows-baileys/receptivo/purmamarca.js';
 import { handleHornocalResponse } from '../flows-baileys/receptivo/hornocal.js';
 import { handleCityTourSaltaResponse } from '../flows-baileys/receptivo/cityTourSalta.js';
 import { handleTrenNubesResponse } from '../flows-baileys/receptivo/trenNubes.js';
+import { handlePromosReceptivoResponse } from '../flows-baileys/receptivo/promos/promosReceptivo.js';
+import { handleCombo1Response } from '../flows-baileys/receptivo/promos/combo1.js';
+import { handleCombo2Response } from '../flows-baileys/receptivo/promos/combo2.js';
 import { handleCotizacionResponse } from '../flows-baileys/emisivo/cotizacion.js';
 import { handlePromosResponse } from '../flows-baileys/emisivo/promos/promos.js';
+import { handleCamboriuResponse } from '../flows-baileys/emisivo/promos/camboriu.js';
 import { handlePeruResponse } from '../flows-baileys/emisivo/salidasGrupales/peru.js';
 import { handleEuropaResponse } from '../flows-baileys/emisivo/salidasGrupales/europa.js';
 import { handleTurquiaDubaiResponse } from '../flows-baileys/emisivo/salidasGrupales/turquiaDubai.js';
@@ -128,6 +133,22 @@ export async function handleConversationState(sock, from, text, conversationStat
             await handleCachiResponse(sock, from, text, conversationState);
             break;
 
+        case 'ESPERANDO_CONFIRMACION_IRUYA':
+            await handleIruyaResponse(sock, from, text, conversationState);
+            break;
+
+        case 'MENU_PROMOS_RECEPTIVO':
+            await handlePromosReceptivoResponse(sock, from, text, conversationState);
+            break;
+
+        case 'ESPERANDO_CONFIRMACION_COMBO1':
+            await handleCombo1Response(sock, from, text, conversationState);
+            break;
+
+        case 'ESPERANDO_CONFIRMACION_COMBO2':
+            await handleCombo2Response(sock, from, text, conversationState);
+            break;
+
         case 'ESPERANDO_CONFIRMACION_HUMAHUACA':
             await handleHumahuacaResponse(sock, from, text, conversationState);
             break;
@@ -170,8 +191,12 @@ export async function handleConversationState(sock, from, text, conversationStat
             }
             break;
 
-        case 'ESPERANDO_CONFIRMACION_PROMOS':
+        case 'MENU_PROMOS':
             await handlePromosResponse(sock, from, text, conversationState);
+            break;
+
+        case 'ESPERANDO_CONFIRMACION_CAMBORIU':
+            await handleCamboriuResponse(sock, from, text, conversationState);
             break;
 
         case 'ESPERANDO_CONFIRMACION_PERU':
