@@ -7,6 +7,10 @@ creds.json
 *.db
 *.sqlite
 
+# Credenciales de Google
+config/google-credentials.json
+credentials.json
+
 # Archivos de ambiente
 .env
 

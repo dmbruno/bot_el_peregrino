@@ -5,12 +5,22 @@ import { google } from 'googleapis';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// ID de tu spreadsheet (extraído de la URL)
-const SPREADSHEET_ID = '1A5ge31_VCrP74eeUc-IUNQy3sZPcbaCR5dKU3xQL-zk';
+// ID de tu spreadsheet (leer desde variable de entorno)
+const SPREADSHEET_ID = process.env.GOOGLE_SHEET_ID;
+
+if (!SPREADSHEET_ID) {
+    console.error('❌ ERROR: Falta la variable de entorno GOOGLE_SHEET_ID');
+    console.error('   Por favor, crea un archivo .env en la raíz del proyecto con:');
+    console.error('   GOOGLE_SHEET_ID=tu_id_de_google_sheet');
+    process.exit(1);
+}
 
 // Rangos para cada pestaña
 const SHEETS = {
