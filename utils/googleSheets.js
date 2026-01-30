@@ -30,6 +30,25 @@ const SHEETS = {
     PROMOS: 'Promos!A:F'
 };
 
+// Función para obtener fecha en zona horaria de Argentina (GMT-3)
+function obtenerFechaArgentina() {
+    const now = new Date();
+    
+    // Convertir a zona horaria de Argentina (America/Argentina/Buenos_Aires)
+    const fechaArgentina = new Date(now.toLocaleString('en-US', { 
+        timeZone: 'America/Argentina/Buenos_Aires' 
+    }));
+    
+    const dia = fechaArgentina.getDate();
+    const mes = fechaArgentina.getMonth() + 1;
+    const anio = fechaArgentina.getFullYear();
+    const horas = fechaArgentina.getHours().toString().padStart(2, '0');
+    const minutos = fechaArgentina.getMinutes().toString().padStart(2, '0');
+    const segundos = fechaArgentina.getSeconds().toString().padStart(2, '0');
+    
+    return `${dia}/${mes}/${anio}, ${horas}:${minutos}:${segundos}`;
+}
+
 // Función para autenticar con Google Sheets
 async function getAuthClient() {
     try {
@@ -78,15 +97,8 @@ export async function agregarConsultaReceptivo(datos) {
 
         const { nombre, telefono, correo, destino } = datos;
 
-        // Generar fecha en formato dd/m/yyyy, hh:mm:ss como TEXTO
-        const now = new Date();
-        const dia = now.getDate();
-        const mes = now.getMonth() + 1;
-        const anio = now.getFullYear();
-        const horas = now.getHours().toString().padStart(2, '0');
-        const minutos = now.getMinutes().toString().padStart(2, '0');
-        const segundos = now.getSeconds().toString().padStart(2, '0');
-        const fechaFormateada = `${dia}/${mes}/${anio}, ${horas}:${minutos}:${segundos}`;
+        // Generar fecha en zona horaria de Argentina
+        const fechaFormateada = obtenerFechaArgentina();
 
         // Datos a insertar: A, B, C, D, E, F
         // A=nombre, B=telefono, C=correo, D=destino, E=fecha_de_contacto, F=revisado
@@ -130,15 +142,8 @@ export async function agregarConsultaEmisivo(datos) {
 
         const { nombre, telefono, correo, cantidadPersonas, lugar, fechaViaje, cantidadDias } = datos;
 
-        // Generar fecha de contacto en formato dd/m/yyyy, hh:mm:ss como TEXTO
-        const now = new Date();
-        const dia = now.getDate();
-        const mes = now.getMonth() + 1;
-        const anio = now.getFullYear();
-        const horas = now.getHours().toString().padStart(2, '0');
-        const minutos = now.getMinutes().toString().padStart(2, '0');
-        const segundos = now.getSeconds().toString().padStart(2, '0');
-        const fechaContacto = `${dia}/${mes}/${anio}, ${horas}:${minutos}:${segundos}`;
+        // Generar fecha en zona horaria de Argentina
+        const fechaContacto = obtenerFechaArgentina();
 
         // Datos a insertar: A, B, C, D, E, F, G, H
         // A=nombre_completo, B=telefono, C=correo, D=cantidad_de_personas, 
@@ -185,15 +190,8 @@ export async function agregarConsultaPaquete(datos) {
 
         const { nombre, telefono, correo, paquete } = datos;
 
-        // Generar fecha de contacto en formato dd/m/yyyy, hh:mm:ss como TEXTO
-        const now = new Date();
-        const dia = now.getDate();
-        const mes = now.getMonth() + 1;
-        const anio = now.getFullYear();
-        const horas = now.getHours().toString().padStart(2, '0');
-        const minutos = now.getMinutes().toString().padStart(2, '0');
-        const segundos = now.getSeconds().toString().padStart(2, '0');
-        const fechaContacto = `${dia}/${mes}/${anio}, ${horas}:${minutos}:${segundos}`;
+        // Generar fecha en zona horaria de Argentina
+        const fechaContacto = obtenerFechaArgentina();
 
         // Datos a insertar: A, B, C, D, E, F
         // A=nombre_completo, B=telefono, C=correo, D=paquete_interes, E=fecha_contacto, F=revisado
@@ -237,15 +235,8 @@ export async function agregarConsultaPromo(datos) {
 
         const { nombre, telefono, correo, promo } = datos;
 
-        // Generar fecha de contacto en formato dd/m/yyyy, hh:mm:ss como TEXTO
-        const now = new Date();
-        const dia = now.getDate();
-        const mes = now.getMonth() + 1;
-        const anio = now.getFullYear();
-        const horas = now.getHours().toString().padStart(2, '0');
-        const minutos = now.getMinutes().toString().padStart(2, '0');
-        const segundos = now.getSeconds().toString().padStart(2, '0');
-        const fechaContacto = `${dia}/${mes}/${anio}, ${horas}:${minutos}:${segundos}`;
+        // Generar fecha en zona horaria de Argentina
+        const fechaContacto = obtenerFechaArgentina();
 
         // Datos a insertar: A, B, C, D, E, F
         // A=nombre_completo, B=telefono, C=correo, D=promo_interes, E=fecha_contacto, F=revisado
