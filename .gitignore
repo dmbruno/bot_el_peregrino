@@ -13,6 +13,7 @@ credentials.json
 
 # Archivos de ambiente
 .env
+.env.example
 
 # Node modules
 node_modules/

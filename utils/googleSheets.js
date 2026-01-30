@@ -33,18 +33,39 @@ const SHEETS = {
 // Función para autenticar con Google Sheets
 async function getAuthClient() {
     try {
-        // Lee las credenciales desde el archivo JSON
-        const credentialsPath = path.join(__dirname, '../config/google-credentials.json');
-        const credentials = JSON.parse(fs.readFileSync(credentialsPath, 'utf8'));
+        let credentials;
+
+        // OPCIÓN 1: Railway/Producción - Leer desde variable de entorno
+        if (process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
+            console.log('📊 Modo: PRODUCCIÓN - Usando credenciales desde variable de entorno');
+            credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
+        } 
+        // OPCIÓN 2: Local - Leer desde archivo
+        else {
+            console.log('📊 Modo: LOCAL - Buscando archivo de credenciales...');
+            const credentialsPath = path.join(__dirname, '../config/google-credentials.json');
+            
+            if (!fs.existsSync(credentialsPath)) {
+                throw new Error(`❌ No se encontró el archivo de credenciales en: ${credentialsPath}\n` +
+                    `En producción, configura la variable GOOGLE_APPLICATION_CREDENTIALS_JSON`);
+            }
+            
+            console.log('✅ Leyendo credenciales desde archivo local');
+            credentials = JSON.parse(fs.readFileSync(credentialsPath, 'utf8'));
+        }
 
         const auth = new google.auth.GoogleAuth({
             credentials,
             scopes: ['https://www.googleapis.com/auth/spreadsheets']
         });
 
-        return await auth.getClient();
+        const client = await auth.getClient();
+        console.log('✅ Autenticado correctamente con Google Sheets');
+        console.log(`📋 Sheet ID: ${SPREADSHEET_ID}`);
+        return client;
+
     } catch (error) {
-        console.error('❌ Error autenticando con Google Sheets:', error);
+        console.error('❌ Error autenticando con Google Sheets:', error.message);
         throw error;
     }
 }
@@ -90,7 +111,9 @@ export async function agregarConsultaReceptivo(datos) {
 
         const response = await sheets.spreadsheets.values.append(request);
         
-        console.log('✅ Consulta agregada a Google Sheets (Receptivo):', response.data);
+        console.log('✅ Consulta agregada a Google Sheets (Receptivo)');
+        console.log(`   📝 Destino: ${destino}`);
+        console.log(`   👤 Cliente: ${nombre}`);
         return response.data;
 
     } catch (error) {
@@ -143,7 +166,9 @@ export async function agregarConsultaEmisivo(datos) {
 
         const response = await sheets.spreadsheets.values.append(request);
         
-        console.log('✅ Consulta agregada a Google Sheets (Emisivo):', response.data);
+        console.log('✅ Consulta agregada a Google Sheets (Emisivo)');
+        console.log(`   📍 Destino: ${lugar}`);
+        console.log(`   👤 Cliente: ${nombre}`);
         return response.data;
 
     } catch (error) {
@@ -193,7 +218,9 @@ export async function agregarConsultaPaquete(datos) {
 
         const response = await sheets.spreadsheets.values.append(request);
         
-        console.log('✅ Consulta agregada a Google Sheets (Paquetes):', response.data);
+        console.log('✅ Consulta agregada a Google Sheets (Paquetes)');
+        console.log(`   📦 Paquete: ${paquete}`);
+        console.log(`   👤 Cliente: ${nombre}`);
         return response.data;
 
     } catch (error) {
@@ -243,7 +270,9 @@ export async function agregarConsultaPromo(datos) {
 
         const response = await sheets.spreadsheets.values.append(request);
         
-        console.log('✅ Consulta agregada a Google Sheets (Promos):', response.data);
+        console.log('✅ Consulta agregada a Google Sheets (Promos)');
+        console.log(`   🎁 Promo: ${promo}`);
+        console.log(`   👤 Cliente: ${nombre}`);
         return response.data;
 
     } catch (error) {
