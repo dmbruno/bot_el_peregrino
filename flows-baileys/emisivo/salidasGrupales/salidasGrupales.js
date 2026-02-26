@@ -8,13 +8,10 @@ export async function showMenuSalidasGrupales(sock, from, conversationState) {
 
 Viajes organizados con todo incluido:
 
-🇵🇪 *1. Perú Legendario*
-   Cusco, Machu Picchu, Lima - 8 días
-
-🌍 *2. Europa Clásica*
+🌍 *1. Europa Clásica*
    Desde Salta - 17 días por Europa
 
-🕌 *3. Turquía y Dubai*
+🕌 *2. Turquía y Dubai*
    15 días entre Oriente y Medio Oriente
 
 
@@ -33,18 +30,12 @@ export async function handleSalidasGrupalesSelection(sock, from, text, conversat
 
     switch (option) {
         case '1':
-            // Importar y ejecutar flujo de Perú
-            const { showPeruInfo } = await import('./peru.js');
-            await showPeruInfo(sock, from, conversationState);
-            break;
-
-        case '2':
             // Importar y ejecutar flujo de Europa
             const { showEuropaInfo } = await import('./europa.js');
             await showEuropaInfo(sock, from, conversationState);
             break;
 
-        case '3':
+        case '2':
             // Importar y ejecutar flujo de Turquía y Dubai
             const { showTurquiaDubaiInfo } = await import('./turquiaDubai.js');
             await showTurquiaDubaiInfo(sock, from, conversationState);
@@ -59,7 +50,7 @@ export async function handleSalidasGrupalesSelection(sock, from, text, conversat
             break;
 
         default:
-            await sendMessage(sock, from, '⚠️ Respuesta no válida. Por favor selecciona una de las opciones (1-3) o escribe *Volver* para regresar.');
+            await sendMessage(sock, from, '⚠️ Respuesta no válida. Por favor selecciona una de las opciones (1-2) o escribe *Volver* para regresar.');
             await showMenuSalidasGrupales(sock, from, conversationState);
             break;
     }

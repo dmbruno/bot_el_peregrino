@@ -15,7 +15,7 @@ Explora el mundo con nuestros paquetes internacionales:
    ¡Ofertas exclusivas disponibles!
 
 ✈️ *3. Salidas Grupales*
-   Perú, Europa, Turquía y más
+   Europa, Turquía y más
 
 
 ✍️ Escribe el *número* de la opción que te interesa. Ó escribe *Volver* para regresar al menu anterior.`;

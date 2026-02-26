@@ -13,7 +13,7 @@ const __dirname = path.dirname(__filename);
 const GUARDERIA_IMAGE_URL = 'https://drive.google.com/uc?export=download&id=1lCp2I7Fri7_Upk6tj8mZvfSd3V4JJGjC';
 
 export async function showMenuPrincipal(sock, from, conversationState) {
-    const menuText = `🌍 *El Peregrino viajes y turismo* 🌍
+    const menuText = `🌍 *Agencia del Peregrino viajes y turismo* 🌍
 
 ¿Qué tipo de experiencia estás buscando?
 

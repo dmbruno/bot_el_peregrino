@@ -101,8 +101,8 @@ Te contactaremos a la brevedad al correo *${user.correo}* o al teléfono *${user
 • Fijo: 3884291903
 • Celular: 3874029503
 
-¡Muchas gracias por confiar en *El Peregrino viajes y turismo*! 🌍✨`);
-            
+¡Muchas gracias por confiar en *Agencia del Peregrino viajes y turismo*! 🌍✨`);
+
             delete conversationState[from];
             
         } catch (error) {

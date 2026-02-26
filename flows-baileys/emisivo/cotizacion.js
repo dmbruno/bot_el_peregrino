@@ -101,7 +101,7 @@ _Ejemplo: 10 días o una semana_`);
 📅 Fecha: ${state.data.fecha}
 📆 Duración: ${state.data.dias}
 
-🎯 Un asesor de *El Peregrino viajes y turismo* revisará tu solicitud y se comunicará contigo a la brevedad con la mejor cotización personalizada.
+🎯 Un asesor de *Agencia del Peregrino viajes y turismo* revisará tu solicitud y se comunicará contigo a la brevedad con la mejor cotización personalizada.
 
 📞 También podés contactarnos directamente:
 • WhatsApp: 3874029503

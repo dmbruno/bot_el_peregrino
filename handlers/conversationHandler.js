@@ -21,7 +21,6 @@ import { handleCombo2Response } from '../flows-baileys/receptivo/promos/combo2.j
 import { handleCotizacionResponse } from '../flows-baileys/emisivo/cotizacion.js';
 import { handlePromosResponse } from '../flows-baileys/emisivo/promos/promos.js';
 import { handleCamboriuResponse } from '../flows-baileys/emisivo/promos/camboriu.js';
-import { handlePeruResponse } from '../flows-baileys/emisivo/salidasGrupales/peru.js';
 import { handleEuropaResponse } from '../flows-baileys/emisivo/salidasGrupales/europa.js';
 import { handleTurquiaDubaiResponse } from '../flows-baileys/emisivo/salidasGrupales/turquiaDubai.js';
 
@@ -197,10 +196,6 @@ export async function handleConversationState(sock, from, text, conversationStat
 
         case 'ESPERANDO_CONFIRMACION_CAMBORIU':
             await handleCamboriuResponse(sock, from, text, conversationState);
-            break;
-
-        case 'ESPERANDO_CONFIRMACION_PERU':
-            await handlePeruResponse(sock, from, text, conversationState);
             break;
 
         case 'ESPERANDO_CONFIRMACION_EUROPA':
